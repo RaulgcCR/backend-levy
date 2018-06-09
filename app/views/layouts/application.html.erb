@@ -9,6 +9,40 @@
   </head>
 
   <body>
+
+  	<header>
+  		<nav class="row center-xs">
+  			<ul class="no-list">
+  				<li class=col-md>
+  					<%= link_to "Inicio", root_path %>
+  				</li>
+  				<li class=col-md>
+  					<%= link_to "Users", new_user_path %>
+  				</li>
+  				<li class=col-md>
+  					<%= link_to "Stores", new_store_path %>
+  				</li>
+  				<li class=col-md>
+  					<%= link_to "Articles", new_article_path %>
+  				</li>
+  				<li class=col-md>
+  					<%= link_to "Comments", new_comment_path %>
+  				</li>
+  				<li class=col-md>
+  					<%= link_to "Scores", new_score_path %>
+  				</li>
+  				<% if admin_signed_in? %>
+				    <li>
+				    	<%= link_to "Cerrar sesion", destroy_admin_session_path, method: :delete %>
+				    </li>
+			    <%end%>
+  			</ul>
+  		</nav>
+  	</header>
+
     <%= yield %>
+    
+    <p class="notice"><%= notice %></p>
+       <p class="alert"><%= alert %></p>
   </body>
 </html>

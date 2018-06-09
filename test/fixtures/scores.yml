@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  calificado: 1
+  calificador: 1
+  calificacion: 1
+
+two:
+  calificado: 1
+  calificador: 1
+  calificacion: 1

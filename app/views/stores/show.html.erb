@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @store.nombre %>
+</p>
+
+<p>
+  <strong>Latitud:</strong>
+  <%= @store.latitud %>
+</p>
+
+<p>
+  <strong>Longitud:</strong>
+  <%= @store.longitud %>
+</p>
+
+<p>
+  <strong>Direccion:</strong>
+  <%= @store.direccion %>
+</p>
+
+<p>
+  <strong>Descripcion:</strong>
+  <%= @store.descripcion %>
+</p>
+
+<p>
+  <strong>Imagen:</strong>
+  <%= @store.imagen %>
+</p>
+
+<%= link_to 'Edit', edit_store_path(@store) %> |
+<%= link_to 'Back', stores_path %>

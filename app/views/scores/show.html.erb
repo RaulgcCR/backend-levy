@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Calificado:</strong>
+  <%= @score.calificado %>
+</p>
+
+<p>
+  <strong>Calificador:</strong>
+  <%= @score.calificador %>
+</p>
+
+<p>
+  <strong>Calificacion:</strong>
+  <%= @score.calificacion %>
+</p>
+
+<%= link_to 'Edit', edit_score_path(@score) %> |
+<%= link_to 'Back', scores_path %>
