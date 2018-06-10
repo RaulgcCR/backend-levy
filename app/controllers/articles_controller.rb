@@ -25,7 +25,9 @@ class ArticlesController < ApplicationController
       if @cadena
         #@articles = Article.where(:nombre => @cadena)
         @articles = Article.where("nombre like ?", "%#{@cadena}%")
-        @articles = parsearArticulo(@articles)
+        @articles.each do |art| 
+          art = parsearArticulo(art)
+        end
       end
     else
       respond_to do |format|
