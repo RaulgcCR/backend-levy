@@ -17,6 +17,20 @@ class ScoresController < ApplicationController
     @score = Score.new
   end
 
+  def indexScore
+    score = Score.where(calificado: params[:id])
+    len=score.length
+    cant=0
+    score.each do |art|
+      cant= cant+ art.calificacion
+    end
+    if len > 0
+      @score = cant/len
+    else
+      @score = false
+    end
+  end
+
   def newScore
     @user = nil
     User.all.each do |usu|

@@ -5,6 +5,9 @@ class ArticlesController < ApplicationController
   # GET /articles.json
   def index
     @articles = Article.all
+    @articles.each do |article|
+      article = parsearArticulo(article)
+    end
   end
 
 

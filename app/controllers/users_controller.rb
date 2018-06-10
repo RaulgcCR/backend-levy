@@ -19,7 +19,7 @@ class UsersController < ApplicationController
 
   def newUser
     @user = nil
-    @user = User.find_by(correo: params[:correo])
+    @user = User.find_by(correo: deparser(params[:correo]))
     if @user == nil
       name = deparser(params[:nombre])
       lastname = deparser(params[:primerapellido])
