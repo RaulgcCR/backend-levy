@@ -18,20 +18,30 @@ class UsersController < ApplicationController
   end
 
   def newUser
-    name = deparser(params[:nombre])
-    lastname = deparser(params[:primerapellido])
-    secondlastname = deparser(params[:segundoapellido])
-    mail= deparser(params[:correo])
-    pwd= deparser(params[:password])
-    tok= createToken()
-    image= deparser(params[:foto])
-    @user= User.new(nombre: name, primerApellido: lastname, segundoApellido: secondlastname, contrasenna: pwd, correo: mail, foto: image, token: tok)
-    respond_to do |format|
-      if @user.save
-        @user = parsearUsuario(@user)
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
-        format.json { render :show, status: :created, location: @user }
-      else
+    @user = nil
+    @user = User.find_by(correo: params[:correo])
+    if @user == nil
+      name = deparser(params[:nombre])
+      lastname = deparser(params[:primerapellido])
+      secondlastname = deparser(params[:segundoapellido])
+      mail= deparser(params[:correo])
+      pwd= deparser(params[:password])
+      tok= createToken()
+      image= deparser(params[:foto])
+      @user= User.new(nombre: name, primerApellido: lastname, segundoApellido: secondlastname, contrasenna: pwd, correo: mail, foto: image, token: tok)
+      respond_to do |format|
+        if @user.save
+          @user = parsearUsuario(@user)
+          format.html { redirect_to @user, notice: 'User was successfully created.' }
+          format.json { render :show, status: :created, location: @user }
+        else
+          format.html { render :new }
+          format.json { render json: @user.errors, status: :unprocessable_entity }
+        end
+      end
+    else
+      respond_to do |format|
+        @user = User.new()
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
@@ -41,7 +51,7 @@ class UsersController < ApplicationController
   def newLog
     mail = deparser(params[:correo])
     pwd = deparser(params[:password])
-    valor = Usuario.where(correo: mail, contrasenna: pwd)
+    valor = User.where(correo: mail, contrasenna: pwd)
       valor.each do |parte|
         parte = parsearUsuario(parte)
       end
@@ -49,7 +59,7 @@ class UsersController < ApplicationController
   end
 
   def newLogToken
-    valor = Usuario.where(token: params[:token])
+    valor = User.where(token: params[:token])
     valor.each do |parte|
       parte = parsearUsuario(parte)
     end

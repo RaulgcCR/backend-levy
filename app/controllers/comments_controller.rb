@@ -26,7 +26,6 @@ class CommentsController < ApplicationController
         print comment.comentario
         @users.insert(-1, User.find(comment.persona))
       end
-      @user = @user.update(token: createToken())
     end
   end
 

@@ -110,6 +110,12 @@ class ArticlesController < ApplicationController
           format.json { render json: @article.errors, status: :unprocessable_entity }
         end
       end
+    else
+      respond_to do |format|
+        @article = Article.new()
+        format.html { render :show }
+        format.json { render json: @article.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -140,6 +146,12 @@ class ArticlesController < ApplicationController
           format.html { render :show }
           format.json { render json: @article.errors, status: :unprocessable_entity }
         end
+      end
+    else
+      respond_to do |format|
+        @article = Article.new()
+        format.html { render :show }
+        format.json { render json: @article.errors, status: :unprocessable_entity }
       end
     end
   end
