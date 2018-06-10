@@ -22,6 +22,8 @@ Rails.application.routes.draw do
 
   get '/stores/add/:nombre/:latitud/:longitud/:direccion/:descripcion/:imagen' => 'stores#newStore'
   get '/scores/add/:calificado/:calificador/:calificacion/:token' => 'scores#newScore'
+  get '/scores/indexscore/:id/:token' => 'scores#indexScore'
+
   get '/comments/add/:articulo/:persona/:comentario/:token' => 'comments#newComment'
 
   get '/comments/mostrar/:articulo/:token' => 'comments#newMostrar'

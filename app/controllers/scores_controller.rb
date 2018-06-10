@@ -18,16 +18,30 @@ class ScoresController < ApplicationController
   end
 
   def indexScore
-    score = Score.where(calificado: params[:id])
-    len=score.length
-    cant=0
-    score.each do |art|
-      cant= cant+ art.calificacion
+    @user = nil
+    User.all.each do |usu|
+      if usu.token == params[:token]
+        @user = usu
+      end
     end
-    if len > 0
-      @score = cant/len
+    if @user != nil
+      score = Score.where(calificado: params[:id])
+      len=score.length
+      cant=0
+      score.each do |art|
+        cant= cant+ art.calificacion
+      end
+      if len > 0
+        @score = cant/len
+      else
+        @score = false
+      end
     else
-      @score = false
+      respond_to do |format|
+        @score = Score.new()
+        format.html { render :edit }
+        format.json { render json: @score.errors, status: :unprocessable_entity }
+      end
     end
   end
 
