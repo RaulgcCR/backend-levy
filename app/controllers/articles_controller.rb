@@ -7,6 +7,16 @@ class ArticlesController < ApplicationController
     @articles = Article.all
   end
 
+
+  def findArticle
+    @cadena = params[:cadena]
+    @articles = Article.all
+    if @cadena
+      @articles = Article.where(:nombre => @cadena)
+     # @article = Article.where("nombre like ?", @cadena)
+    end
+  end
+
   # GET /articles/1
   # GET /articles/1.json
   def show
@@ -106,14 +116,14 @@ class ArticlesController < ApplicationController
           format.html { redirect_to @article, notice: 'Article was successfully updated.' }
           format.json { render :show, status: :ok, location: @article }
         else
-          format.html { render :index}
+          format.html { render :edit}
           format.json { render json: @article.errors, status: :unprocessable_entity }
         end
       end
     else
       respond_to do |format|
         @article = Article.new()
-        format.html { render :show }
+        format.html { render :edit }
         format.json { render json: @article.errors, status: :unprocessable_entity }
       end
     end
@@ -143,14 +153,14 @@ class ArticlesController < ApplicationController
           format.html { redirect_to articles_url, notice: 'Article was successfully destroyed.' }
           format.json { head :no_content }
         else
-          format.html { render :show }
+          format.html { render :edit }
           format.json { render json: @article.errors, status: :unprocessable_entity }
         end
       end
     else
       respond_to do |format|
         @article = Article.new()
-        format.html { render :show }
+        format.html { render :edit }
         format.json { render json: @article.errors, status: :unprocessable_entity }
       end
     end

@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   get '/articles/add/:nombre/:precio/:descripcion/:proveedor/:imagen/:modo/:token' => 'articles#newArticle'
   get '/articles/modify/:id/:nombre/:precio/:descripcion/:proveedor/:imagen/:modo/:token' => 'articles#modifyArticle'
   get '/articles/delete/:id/:token' => 'articles#deleteArticle'
+  get '/articles/find/:cadena/:token' => 'articles#findArticle'
 
   get '/stores/add/:nombre/:latitud/:longitud/:direccion/:descripcion/:imagen' => 'stores#newStore'
   get '/scores/add/:calificado/:calificador/:calificacion/:token' => 'scores#newScore'
