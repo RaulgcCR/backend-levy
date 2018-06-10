@@ -121,6 +121,7 @@ class UsersController < ApplicationController
       respond_to do |format|
         if @user.update(nombre: name, primerApellido: lastname, segundoApellido: secondlastname, correo: mail, contrasenna: pwd, foto: image)
           format.html { redirect_to @user, notice: 'User was successfully updated.' }
+          @user = parsearUsuario(@user)
           format.json { render :show, status: :ok, location: @user }
         else
           format.html { render :show }
