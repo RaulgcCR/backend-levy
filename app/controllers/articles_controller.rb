@@ -16,7 +16,7 @@ class ArticlesController < ApplicationController
       end
     end
     if @user != nil
-      @cadena = params[:cadena]
+      @cadena = deparser(params[:cadena])
       @articles = Article.all
       if @cadena
         @articles = Article.where(:nombre => @cadena)
