@@ -25,6 +25,9 @@ class CommentsController < ApplicationController
       @comments.each do |comment|
         comment = parsearComment(comment)
         @users.insert(-1, User.find(comment.persona))
+        @users.each do |user|
+          user = parsearUsuario(user)
+        end
       end
     end
   end
@@ -112,6 +115,16 @@ class CommentsController < ApplicationController
   def parsearComment(comm)
     comm.comentario = parser(comm.comentario)
     return comm
+  end
+
+  def parsearUsuario(user)
+    user.nombre = parser(user.nombre)
+    user.primerApellido = parser(user.primerApellido)
+    user.segundoApellido = parser(user.segundoApellido)
+    user.foto = parser(user.foto)
+    user.correo = parser(user.correo)
+    user.contrasenna = parser(user.contrasenna)
+    return user
   end
 
   private
