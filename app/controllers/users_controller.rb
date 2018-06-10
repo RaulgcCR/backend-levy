@@ -122,7 +122,7 @@ class UsersController < ApplicationController
         if @user.update(nombre: name, primerApellido: lastname, segundoApellido: secondlastname, correo: mail, contrasenna: pwd, foto: image)
           format.html { redirect_to @user, notice: 'User was successfully updated.' }
           @user = parsearUsuario(@user)
-          format.json { render :show, status: :ok, location: @user }
+          format.json { render :modifyUser, status: :ok, location: @user }
         else
           format.html { render :show }
           format.json { render json: @user.errors, status: :unprocessable_entity }
