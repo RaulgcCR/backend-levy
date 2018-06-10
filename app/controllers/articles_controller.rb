@@ -135,6 +135,7 @@ class ArticlesController < ApplicationController
       respond_to do |format|
         if @article.update(nombre: name, precio: price, descripcion: desc, proveedor: provider, image: image, modo: mode)
           format.html { redirect_to @article, notice: 'Article was successfully updated.' }
+          parsearArticulo(@article)
           format.json { render :show, status: :ok, location: @article }
         else
           format.html { render :edit}

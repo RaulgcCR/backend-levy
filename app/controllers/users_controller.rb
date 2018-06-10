@@ -104,18 +104,32 @@ class UsersController < ApplicationController
 
 
   def modifyUser
-    name = deparser(params[:nombre])
-    lastname = deparser(params[:primerapellido])
-    secondlastname = deparser(params[:segundoapellido])
-    mail= deparser(params[:correo])
-    pwd= deparser(params[:password])
-    image= deparser(params[:foto])
-    @user = User.find(params[:id])
-    respond_to do |format|
-      if @user.update(nombre: name, primerApellido: lastname, segundoApellido: secondlastname, correo: mail, contrasenna: pwd, foto: image)
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
-        format.json { render :show, status: :ok, location: @user }
-      else
+    @user = nil
+    User.all.each do |usu|
+      if usu.token == params[:token]
+        @user = usu
+      end
+    end
+    if @user != nil
+      name = deparser(params[:nombre])
+      lastname = deparser(params[:primerapellido])
+      secondlastname = deparser(params[:segundoapellido])
+      mail= deparser(params[:correo])
+      pwd= deparser(params[:password])
+      image= deparser(params[:foto])
+      @user = User.find(params[:id])
+      respond_to do |format|
+        if @user.update(nombre: name, primerApellido: lastname, segundoApellido: secondlastname, correo: mail, contrasenna: pwd, foto: image)
+          format.html { redirect_to @user, notice: 'User was successfully updated.' }
+          format.json { render :show, status: :ok, location: @user }
+        else
+          format.html { render :show }
+          format.json { render json: @user.errors, status: :unprocessable_entity }
+        end
+      end
+    else
+      respond_to do |format|
+        @user = User.new()
         format.html { render :show }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end

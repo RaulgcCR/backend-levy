@@ -23,7 +23,7 @@ class CommentsController < ApplicationController
       @comments = Comment.where(articulo: params[:articulo])
       @users = []
       @comments.each do |comment|
-        print comment.comentario
+        comment = parsearComment(comment)
         @users.insert(-1, User.find(comment.persona))
       end
     end

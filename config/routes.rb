@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   root 'main#index'
 
   get '/users/add/:nombre/:primerapellido/:segundoapellido/:correo/:password/:foto' => 'users#newUser'
-  get '/users/modify/:id/:nombre/:primerapellido/:segundoapellido/:correo/:password/:foto' => 'users#modifyUser'
+  get '/users/modify/:id/:nombre/:primerapellido/:segundoapellido/:correo/:password/:foto/:token' => 'users#modifyUser'
   get '/users/login/:correo/:password' => 'users#newLog'
   get '/users/login/:token' => 'users#newLogToken'
 
