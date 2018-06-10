@@ -10,6 +10,8 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    @users = User.find(params[:id])
+    @users = parsearUsuario(@users)
   end
 
   # GET /users/new
