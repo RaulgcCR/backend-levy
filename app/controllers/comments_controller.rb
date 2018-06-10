@@ -17,6 +17,39 @@ class CommentsController < ApplicationController
     @comment = Comment.new
   end
 
+  def newComment
+    @user = nil
+    User.all.each do |usu|
+      if usu.token == params[:token]
+        @user = usu
+      end
+    end
+    if @user != nil
+      print 'hello moto'
+      art = params[:articulo]
+      pers = params[:persona]
+      comm= deparser(params[:comentario])
+      @comment= Comment.new(articulo: art, persona: pers, comentario: comm)
+      respond_to do |format|
+        if @comment.save
+          @user.update(token: createToken())
+          format.html { redirect_to @comment, notice: 'Score was successfully created.' }
+          format.json { render :show, status: :created, location: @comment }
+        else
+          format.html { render :new }
+          format.json { render json: @comment.errors, status: :unprocessable_entity }
+        end
+      end
+      @comment = parsearComment(@comment)
+    else
+      respond_to do |format|
+        @comment = Comment.new()
+        format.html { render :new }
+        format.json { render json: @comment.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   # GET /comments/1/edit
   def edit
   end
@@ -59,6 +92,11 @@ class CommentsController < ApplicationController
       format.html { redirect_to comments_url, notice: 'Comment was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def parsearComment(comm)
+    comm.comentario = parser(comm.comentario)
+    return comm
   end
 
   private

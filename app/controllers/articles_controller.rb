@@ -17,6 +17,41 @@ class ArticlesController < ApplicationController
     @article = Article.new
   end
 
+  def newArticle
+    @user = nil
+    User.all.each do |usu|
+      if usu.token == params[:token]
+        @user = usu
+      end
+    end
+    if @user != nil
+      name = deparser(params[:nombre])
+      desc = deparser(params[:descripcion])
+      price= params[:precio]
+      provider= params[:proveedor]
+      image= deparser(params[:imagen])
+      mode= params[:modo]
+      @article= Article.new(nombre: name, precio: price, descripcion: desc, proveedor: provider, image: image, modo: mode)
+      respond_to do |format|
+        if @article.save
+          @user.update(token: createToken())
+          format.html { redirect_to @article, notice: 'Article was successfully created.' }
+          format.json { render :show, status: :created, location: @article }
+        else
+          format.html { render :new }
+          format.json { render json: @article.errors, status: :unprocessable_entity }
+        end
+      end
+      @article = parsearArticulo(@article)
+    else
+      respond_to do |format|
+        @article = Article.new()
+        format.html { render :new }
+        format.json { render json: @article.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   # GET /articles/1/edit
   def edit
   end
@@ -59,6 +94,13 @@ class ArticlesController < ApplicationController
       format.html { redirect_to articles_url, notice: 'Article was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def parsearArticulo(art)
+    art.nombre = parser(art.nombre)
+    art.descripcion = parser(art.descripcion)
+    art.image = parser(art.image)
+    return art
   end
 
   private

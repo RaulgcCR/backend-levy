@@ -17,6 +17,37 @@ class ScoresController < ApplicationController
     @score = Score.new
   end
 
+  def newScore
+    @user = nil
+    User.all.each do |usu|
+      if usu.token == params[:token]
+        @user = usu
+      end
+    end
+    if @user != nil
+      cali = params[:calificado]
+      calif = params[:calificador]
+      califi= params[:calificacion]
+      @score= Score.new(calificado: cali, calificador: calif, calificacion: califi)
+      respond_to do |format|
+        if @score.save
+          @user.update(token: createToken())
+          format.html { redirect_to @score, notice: 'Score was successfully created.' }
+          format.json { render :show, status: :created, location: @score }
+        else
+          format.html { render :new }
+          format.json { render json: @score.errors, status: :unprocessable_entity }
+        end
+      end
+    else
+      respond_to do |format|
+        @score = Score.new()
+        format.html { render :new }
+        format.json { render json: @score.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   # GET /scores/1/edit
   def edit
   end

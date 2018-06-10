@@ -17,6 +17,26 @@ class StoresController < ApplicationController
     @store = Store.new
   end
 
+  def newStore
+    name = deparser(params[:nombre])
+    lat = deparser(params[:latitud])
+    lon = deparser(params[:longitud])
+    address= deparser(params[:direccion])
+    desc= deparser(params[:descripcion])
+    image= deparser(params[:imagen])
+    @store= Store.new(nombre: name, latitud: lat, longitud: lon, direccion: address, descripcion: desc, imagen: image)
+    respond_to do |format|
+      if @store.save
+        format.html { redirect_to @store, notice: 'Store was successfully created.' }
+        format.json { render :show, status: :created, location: @store }
+      else
+        format.html { render :new }
+        format.json { render json: @store.errors, status: :unprocessable_entity }
+      end
+    end
+    @store = parsearStore(@store)
+  end
+
   # GET /stores/1/edit
   def edit
   end
@@ -59,6 +79,16 @@ class StoresController < ApplicationController
       format.html { redirect_to stores_url, notice: 'Store was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def parsearStore(store)
+    store.nombre = parser(store.nombre)
+    store.latitud = parser(store.latitud)
+    store.longitud = parser(store.longitud)
+    store.direccion = parser(store.direccion)
+    store.descripcion = parser(store.descripcion)
+    store.imagen = parser(store.imagen)
+    return store
   end
 
   private
