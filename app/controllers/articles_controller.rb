@@ -9,11 +9,25 @@ class ArticlesController < ApplicationController
 
 
   def findArticle
-    @cadena = params[:cadena]
-    @articles = Article.all
-    if @cadena
-      @articles = Article.where(:nombre => @cadena)
-     # @article = Article.where("nombre like ?", @cadena)
+    @user = nil
+    User.all.each do |usu|
+      if usu.token == params[:token]
+        @user = usu
+      end
+    end
+    if @user != nil
+      @cadena = params[:cadena]
+      @articles = Article.all
+      if @cadena
+        @articles = Article.where(:nombre => @cadena)
+       # @article = Article.where("nombre like ?", @cadena)
+      end
+    else
+      respond_to do |format|
+        @article = Article.new()
+        format.html { render :show }
+        format.json { render json: @article.errors, status: :unprocessable_entity }
+      end
     end
   end
 
