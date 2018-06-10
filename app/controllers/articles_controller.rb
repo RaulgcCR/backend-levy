@@ -19,8 +19,8 @@ class ArticlesController < ApplicationController
       @cadena = deparser(params[:cadena])
       @articles = Article.all
       if @cadena
-        @articles = Article.where(:nombre => @cadena)
-       # @article = Article.where("nombre like ?", @cadena)
+        #@articles = Article.where(:nombre => @cadena)
+        @articles = Article.where("nombre like ?", "%#{@cadena}%")
       end
     else
       respond_to do |format|
