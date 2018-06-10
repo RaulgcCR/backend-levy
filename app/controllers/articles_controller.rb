@@ -34,7 +34,7 @@ class ArticlesController < ApplicationController
       @article= Article.new(nombre: name, precio: price, descripcion: desc, proveedor: provider, image: image, modo: mode)
       respond_to do |format|
         if @article.save
-          @user.update(token: createToken())
+          @article = parsearArticulo(@article)
           format.html { redirect_to @article, notice: 'Article was successfully created.' }
           format.json { render :show, status: :created, location: @article }
         else
@@ -42,7 +42,6 @@ class ArticlesController < ApplicationController
           format.json { render json: @article.errors, status: :unprocessable_entity }
         end
       end
-      @article = parsearArticulo(@article)
     else
       respond_to do |format|
         @article = Article.new()
@@ -86,6 +85,34 @@ class ArticlesController < ApplicationController
     end
   end
 
+
+  def modifyArticle
+    @user = nil
+    User.all.each do |usu|
+      if usu.token == params[:token]
+        @user = usu
+      end
+    end
+    if @user != nil
+      name = deparser(params[:nombre])
+      desc = deparser(params[:descripcion])
+      price= params[:precio]
+      provider= params[:proveedor]
+      image= deparser(params[:imagen])
+      mode= params[:modo]
+      @article = Article.find(params[:id])
+      respond_to do |format|
+        if @article.update(nombre: name, precio: price, descripcion: desc, proveedor: provider, image: image, modo: mode)
+          format.html { redirect_to @article, notice: 'Article was successfully updated.' }
+          format.json { render :show, status: :ok, location: @article }
+        else
+          format.html { render :index}
+          format.json { render json: @article.errors, status: :unprocessable_entity }
+        end
+      end
+    end
+  end
+
   # DELETE /articles/1
   # DELETE /articles/1.json
   def destroy
@@ -93,6 +120,27 @@ class ArticlesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to articles_url, notice: 'Article was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def deleteArticle
+    @user = nil
+    User.all.each do |usu|
+      if usu.token == params[:token]
+        @user = usu
+      end
+    end
+    if @user != nil
+      @article = Article.find(params[:id])
+      respond_to do |format|
+        if @article.destroy
+          format.html { redirect_to articles_url, notice: 'Article was successfully destroyed.' }
+          format.json { head :no_content }
+        else
+          format.html { render :show }
+          format.json { render json: @article.errors, status: :unprocessable_entity }
+        end
+      end
     end
   end
 

@@ -31,7 +31,6 @@ class ScoresController < ApplicationController
       @score= Score.new(calificado: cali, calificador: calif, calificacion: califi)
       respond_to do |format|
         if @score.save
-          @user.update(token: createToken())
           format.html { redirect_to @score, notice: 'Score was successfully created.' }
           format.json { render :show, status: :created, location: @score }
         else

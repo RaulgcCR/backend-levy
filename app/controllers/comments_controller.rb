@@ -12,6 +12,24 @@ class CommentsController < ApplicationController
   def show
   end
 
+  def newMostrar
+    @user = nil
+    User.all.each do |usu|
+      if usu.token == params[:token]
+        @user = usu
+      end
+    end
+    if @user != nil
+      @comments = Comment.where(articulo: params[:articulo])
+      @users = []
+      @comments.each do |comment|
+        print comment.comentario
+        @users.insert(-1, User.find(comment.persona))
+      end
+      @user = @user.update(token: createToken())
+    end
+  end
+
   # GET /comments/new
   def new
     @comment = Comment.new
@@ -25,22 +43,20 @@ class CommentsController < ApplicationController
       end
     end
     if @user != nil
-      print 'hello moto'
       art = params[:articulo]
       pers = params[:persona]
       comm= deparser(params[:comentario])
       @comment= Comment.new(articulo: art, persona: pers, comentario: comm)
       respond_to do |format|
         if @comment.save
-          @user.update(token: createToken())
+          @comment = parsearComment(@comment)
           format.html { redirect_to @comment, notice: 'Score was successfully created.' }
-          format.json { render :show, status: :created, location: @comment }
+          format.json { render :show, status: :created, location: @comment}
         else
           format.html { render :new }
           format.json { render json: @comment.errors, status: :unprocessable_entity }
         end
       end
-      @comment = parsearComment(@comment)
     else
       respond_to do |format|
         @comment = Comment.new()

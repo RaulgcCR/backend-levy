@@ -28,6 +28,7 @@ class UsersController < ApplicationController
     @user= User.new(nombre: name, primerApellido: lastname, segundoApellido: secondlastname, contrasenna: pwd, correo: mail, foto: image, token: tok)
     respond_to do |format|
       if @user.save
+        @user = parsearUsuario(@user)
         format.html { redirect_to @user, notice: 'User was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
@@ -35,7 +36,24 @@ class UsersController < ApplicationController
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
-    @user = parsearUsuario(@user)
+  end
+
+  def newLog
+    mail = deparser(params[:correo])
+    pwd = deparser(params[:password])
+    valor = Usuario.where(correo: mail, contrasenna: pwd)
+      valor.each do |parte|
+        parte = parsearUsuario(parte)
+      end
+    @user = valor
+  end
+
+  def newLogToken
+    valor = Usuario.where(token: params[:token])
+    valor.each do |parte|
+      parte = parsearUsuario(parte)
+    end
+    @user = valor
   end
 
   # GET /users/1/edit
@@ -62,11 +80,31 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1.json
   def update
     respond_to do |format|
-      if @user.update(user_params)
+      if @user.update(nombre: params[:user][:nombre], primerApellido: params[:user][:primerApellido], segundoApellido: params[:user][:segundoApellido], correo: params[:user][:correo], contrasenna: params[:user][:contrasenna], foto: params[:user][:foto], token: params[:user][:token])
         format.html { redirect_to @user, notice: 'User was successfully updated.' }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+
+  def modifyUser
+    name = deparser(params[:nombre])
+    lastname = deparser(params[:primerapellido])
+    secondlastname = deparser(params[:segundoapellido])
+    mail= deparser(params[:correo])
+    pwd= deparser(params[:password])
+    image= deparser(params[:foto])
+    @user = User.find(params[:id])
+    respond_to do |format|
+      if @user.update(nombre: name, primerApellido: lastname, segundoApellido: secondlastname, correo: mail, contrasenna: pwd, foto: image)
+        format.html { redirect_to @user, notice: 'User was successfully updated.' }
+        format.json { render :show, status: :ok, location: @user }
+      else
+        format.html { render :show }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end

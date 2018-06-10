@@ -27,6 +27,7 @@ class StoresController < ApplicationController
     @store= Store.new(nombre: name, latitud: lat, longitud: lon, direccion: address, descripcion: desc, imagen: image)
     respond_to do |format|
       if @store.save
+        @store = parsearStore(@store)
         format.html { redirect_to @store, notice: 'Store was successfully created.' }
         format.json { render :show, status: :created, location: @store }
       else
@@ -34,7 +35,6 @@ class StoresController < ApplicationController
         format.json { render json: @store.errors, status: :unprocessable_entity }
       end
     end
-    @store = parsearStore(@store)
   end
 
   # GET /stores/1/edit
