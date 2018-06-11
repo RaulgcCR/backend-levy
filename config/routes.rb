@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   get '/scores/add/:calificado/:calificador/:calificacion/:token' => 'scores#newScore'
   get '/scores/indexscore/:id/:token' => 'scores#indexScore'
   get '/scores/modify/:id/:calificado/:calificador/:calificacion/:token' => 'scores#modifyScore'
+  get '/scores/modify/:calificado/:calificador/:token' => 'scores#getScore'
 
   get '/comments/add/:articulo/:persona/:comentario/:token' => 'comments#newComment'
 

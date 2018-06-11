@@ -12,6 +12,26 @@ class ScoresController < ApplicationController
   def show
   end
 
+  def getScore
+    @user = nil
+    User.all.each do |usu|
+      if usu.token == params[:token]
+        @user = usu
+      end
+    end
+    if @user != nil
+      cali = params[:calificado]
+      calif = params[:calificador]
+      @score = Score.where("calificado = ? AND calificador = ?", cali, calif)
+    else
+      respond_to do |format|
+        @score = Score.new()
+        format.html { render :edit }
+        format.json { render json: @score.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   # GET /scores/new
   def new
     @score = Score.new
