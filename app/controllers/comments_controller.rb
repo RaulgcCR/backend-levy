@@ -25,9 +25,9 @@ class CommentsController < ApplicationController
       @comments.each do |comment|
         comment = parsearComment(comment)
         @users.insert(-1, User.find(comment.persona))
-        @users.each do |user|
-          user = parsearUsuario(user)
-        end
+      end
+      @users.each do |user|
+        user = parsearUsuario(user)
       end
     end
   end
