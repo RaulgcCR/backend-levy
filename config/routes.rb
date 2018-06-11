@@ -21,8 +21,10 @@ Rails.application.routes.draw do
   get '/articles/find/:cadena/:token' => 'articles#findArticle'
 
   get '/stores/add/:nombre/:latitud/:longitud/:direccion/:descripcion/:imagen' => 'stores#newStore'
+
   get '/scores/add/:calificado/:calificador/:calificacion/:token' => 'scores#newScore'
   get '/scores/indexscore/:id/:token' => 'scores#indexScore'
+  get '/scores/modify/:id/:calificado/:calificador/:calificacion/:token' => 'scores#modifyScore'
 
   get '/comments/add/:articulo/:persona/:comentario/:token' => 'comments#newComment'
 

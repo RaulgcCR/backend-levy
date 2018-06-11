@@ -109,6 +109,36 @@ class ScoresController < ApplicationController
     end
   end
 
+  def modifyScore
+    @user = nil
+    User.all.each do |usu|
+      if usu.token == params[:token]
+        @user = usu
+      end
+    end
+    if @user != nil
+      cali = params[:calificado]
+      calif = params[:calificador]
+      califi= params[:calificacion]
+      @score = Score.find(params[:id])
+      respond_to do |format|
+        if @score.update(calificado: cali, calificador: calif, calificacion: califi)
+          format.html { redirect_to @score, notice: 'Article was successfully updated.' }
+          format.json { render :show, status: :ok, location: @score }
+        else
+          format.html { render :edit}
+          format.json { render json: @score.errors, status: :unprocessable_entity }
+        end
+      end
+    else
+      respond_to do |format|
+        @score = Score.new()
+        format.html { render :edit }
+        format.json { render json: @score.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   # DELETE /scores/1
   # DELETE /scores/1.json
   def destroy
